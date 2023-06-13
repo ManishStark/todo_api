@@ -9,6 +9,7 @@ const morgan = require("morgan"); // log all apis request in console
 const rateLimit = require("express-rate-limit"); // limit request through per ip
 const xssClean = require("xss-clean");
 const mongoSanitize = require("express-mongo-sanitize");
+const hpp = require("hpp"); // preven parametes pollution
 
 const limiter = rateLimit({
   max: 100,
@@ -25,6 +26,7 @@ module.exports = function (app) {
   app.use("/", limiter);
   app.use(xssClean());
   app.use(mongoSanitize());
+  app.use(hpp());
 
   // Router for APIs
   app.use(express.json({ limit: "10kb" }));
