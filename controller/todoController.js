@@ -1,6 +1,17 @@
 const Todo = require("../model/todoModel");
 const AppError = require("../utils/appError");
 const Joi = require("joi");
+
+module.exports.getAllTodo = async (req, res, next) => {
+  const todos = await Todo.find({ email: req.user.email, completed: false });
+  if (todos.length == 0) return next(new AppError("No todos yet..!", 400));
+  res.status(200).json({
+    status: 200,
+    message: "success",
+    data: todos,
+  });
+};
+
 module.exports.addTodo = async (req, res, next) => {
   const isExists = await Todo.find({
     title: req.body.title,

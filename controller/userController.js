@@ -33,10 +33,20 @@ module.exports.login = async (req, res, next) => {
   const isPasswordMatch = await bcrypt.compare(req.body.password, userPassword);
   if (!isPasswordMatch) return next(new AppError("Invalid password", 400));
 
+  const token = generateToken(req.body.email);
+  const cookieOptions = {
+    expires: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
+    httpOnly: true,
+    // secure: true,
+  };
+  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
+
+  res.cookie("jwt", token, cookieOptions);
+
   res.status(200).json({
     status: 200,
     message: "Login Successfull",
-    token: generateToken(req.body.email),
+    token,
   });
 };
 

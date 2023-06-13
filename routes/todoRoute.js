@@ -6,6 +6,7 @@ const validateId = require("../middleware//validateID");
 
 const router = express.Router();
 
+router.get("/all", auth, Todo.getAllTodo);
 router.post("/add", auth, validator(Todo.validateTodo), Todo.addTodo);
 router.put(
   "/updateTitle/:id",

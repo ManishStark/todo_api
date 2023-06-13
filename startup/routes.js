@@ -20,7 +20,7 @@ module.exports = function (app) {
   // Middleware for security
   app.use(helmet());
   if (process.env.NODE_ENV === "development") {
-    app.use(morgan("dev")); //logging all api request and status code in console
+    app.use(morgan("dev"));
   }
   app.use("/", limiter);
   app.use(xssClean());
@@ -30,6 +30,8 @@ module.exports = function (app) {
   app.use(express.json({ limit: "10kb" }));
   app.use("/api/user", userRoute);
   app.use("/api/todo", todoRoute);
-  app.use("*", (req, res) => res.status(404).send("No Routes found"));
+  app.use("*", (req, res) =>
+    res.status(404).json({ status: 500, message: "No Routes Found..!" })
+  );
   app.use(error);
 };
