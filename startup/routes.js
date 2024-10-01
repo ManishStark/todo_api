@@ -2,6 +2,7 @@ const express = require("express");
 const userRoute = require("../routes/userRoute");
 const todoRoute = require("../routes/todoRoute");
 const error = require("../middleware/error");
+const cookieParser = require("cookie-parser");
 
 // For Security must include following middlewares
 const helmet = require("helmet"); //this include some secure headers
@@ -12,7 +13,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const hpp = require("hpp"); // preven parametes pollution
 
 const limiter = rateLimit({
-  max: 100,
+  max: 1000,
   windowMs: 60 * 60 * 1000,
   message: "To many requests from this IP, try again after 1 hour..",
 });
@@ -30,6 +31,7 @@ module.exports = function (app) {
 
   // Router for APIs
   app.use(express.json({ limit: "10kb" }));
+  app.use(cookieParser());
   app.use("/api/user", userRoute);
   app.use("/api/todo", todoRoute);
   app.use("*", (req, res) =>

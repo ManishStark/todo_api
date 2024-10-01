@@ -4,7 +4,7 @@ const Joi = require("joi");
 
 module.exports.getAllTodo = async (req, res, next) => {
   const todos = await Todo.find({ email: req.user.email, completed: false });
-  if (todos.length == 0) return next(new AppError("No todos yet..!", 400));
+  // if (todos.length == 0) return next(new AppError("No todos yet..!", 400));
   res.status(200).json({
     status: 200,
     message: "success",
@@ -18,8 +18,12 @@ module.exports.addTodo = async (req, res, next) => {
     email: req.user.email,
     completed: false,
   });
-  if (isExists.length != 0)
-    return next(new AppError("Todo is already exits..", 400));
+  if (isExists.length != 0) {
+    res.status(400).json({
+      status: 400,
+      message: "This email is exist",
+    });
+  }
 
   await Todo.create({
     title: req.body.title,

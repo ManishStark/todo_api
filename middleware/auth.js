@@ -13,6 +13,6 @@ module.exports = async (req, res, next) => {
     req.user = user;
     next();
   } catch (err) {
-    next(new AppError("Unathorized or session expired..!", 401));
+    next(new AppError("Session has expired.. Please login again", 401));
   }
 };

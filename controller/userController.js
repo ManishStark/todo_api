@@ -8,7 +8,10 @@ const JWT = require("jsonwebtoken");
 module.exports.createUser = async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (user) {
-    return next(new AppError("This email id is already exits", 400));
+    res.status(400).json({
+      status: 400,
+      message: "This id is exist",
+    });
   }
   const passHash = await bcrypt.hash(req.body.password, 12);
 
