@@ -11,6 +11,7 @@ const rateLimit = require("express-rate-limit"); // limit request through per ip
 const xssClean = require("xss-clean");
 const mongoSanitize = require("express-mongo-sanitize");
 const hpp = require("hpp"); // preven parametes pollution
+const cookieParser = require("cookie-parser");
 
 const limiter = rateLimit({
   max: 1000,
@@ -28,6 +29,7 @@ module.exports = function (app) {
   app.use(xssClean());
   app.use(mongoSanitize());
   app.use(hpp());
+  app.use(cookieParser());
 
   // Router for APIs
   app.use(express.json({ limit: "10kb" }));
